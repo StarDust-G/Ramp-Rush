@@ -47,6 +47,6 @@ public class InputHandler : MonoBehaviour
     
     private void OnDisable()
     {
-        moveAction.Disable();
+         moveAction.Disable();
     }
 }

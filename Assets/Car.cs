@@ -8,8 +8,11 @@ public class Car : MonoBehaviour
     [SerializeField] private bool[] isFrontTire;
     [SerializeField] private float tireMass = 20f;
     [SerializeField] private float maxSteeringAngle = 30f;
+    [SerializeField] private float frontTireTractionPercent = 0.05f;
+    [SerializeField] private float rearTireTractionPercent = 0.3f;
 
     [Header("Suspension")]
+    [SerializeField] private float suspensionLength = 1f;
     [SerializeField] private float suspensionRestDist = 0.5f;
     [SerializeField] private float springStrength = 10000f;
     [SerializeField] private float springDamper = 1000f;
@@ -52,7 +55,7 @@ public class Car : MonoBehaviour
             Transform tireTransform = tires[i].transform;
             
             // Raycast to the ground (non-alloc version to reduce GC)
-            int hitCount = Physics.RaycastNonAlloc(tireTransform.position, -tireTransform.up, tireRayResults, 1.0f);
+            int hitCount = Physics.RaycastNonAlloc(tireTransform.position, -tireTransform.up, tireRayResults, suspensionLength);
             if (hitCount == 0)
                 continue;
 
@@ -96,9 +99,9 @@ public class Car : MonoBehaviour
         // Calculate slip and traction
         float slipPercentage = Mathf.Clamp01(Mathf.Abs(lateralVelocity) / carTopSpeed);
         float tractionFactor = isFrontTire[tireIndex] 
-            ? frontTireTractionCurve.Evaluate(slipPercentage) 
-            : rearTireTractionCurve.Evaluate(slipPercentage);
-            
+            ? frontTireTractionPercent 
+            : rearTireTractionPercent;
+        
         // Apply counter-force
         float desiredVelChange = -lateralVelocity * tractionFactor;
         float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
