@@ -7,7 +7,7 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private InputActionAsset input;
     
     [Header("Action map name references")]
-    [SerializeField] private string actionMapName = "FirstPerson";
+    [SerializeField] private string actionMapName = "Player";
     
     [Header("Action name references")]
     [SerializeField] private string move = "Move";
